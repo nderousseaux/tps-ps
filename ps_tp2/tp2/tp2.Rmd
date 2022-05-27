@@ -1,0 +1,186 @@
+---
+title: "TP2 - Réponses"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Exercice 1
+
+## Question A
+```{r}
+#On crée les objets
+superficie = c('[0;5[', '[5,10[', '[10;20[', '[20;50[', '[50;100[')
+bornes = c(0,5,10,20,50,100)
+effectif = c(5,24,38,26,7)
+
+amplitudes = diff(bornes) #On calcule l'amplitude de chaque classe
+centres = bornes[-6] + amplitudes/2 #On calcule le centre de chaque classe : soit les bornes (sauf la dernière) + la taille de la borne/2
+hauteur = effectif/sum(effectif)/amplitudes
+
+#On crée l'histogramme
+barplot(height = hauteur,
+        width = amplitudes,
+        names.arg = superficie,
+        las = 2
+)
+```
+
+## Question B
+```{r}
+ecc = cumsum(effectif) #Effectif cummulé croissant
+ecd = rev(cumsum(rev(effectif))) #Effectif cummulé décroissant
+fcc = ecc/sum(effectif) #Fréquence cummulée croissante
+fcd = ecd/sum(effectif) #Fréquence cummulée décroissante
+```
+
+## Question C
+```{r}
+centres[which(rank(hauteur)==5)] #Pour trouver 
+```
+
+## Question D
+```{r}
+donnees = rep(centres, effectif)
+mean(donnees)
+var(donnees)
+```
+
+## Question E
+```{r}
+median(donnees)
+quantile(donnees, 0.5)
+```
+
+# Exercice 2
+
+## Question A
+L'unité statistique est le prélévement. Une *observation* dans ce contexte est un échantillion de sable dans lequel on compte le nombre de vers. L'unique variable ici est la variable quantitative discrète qu'est le nombre de vers. À chaque unité statistique (prélévement), on associe la valeur de la variable "nombre de vers".
+
+```{r}
+# On crée les objets
+vers = c(0,1,2,3,4,5,6,7)
+prelevements = c(13,27,28,19,8,3,1,1)
+
+barplot(height = prelevements/sum(prelevements),
+        names.arg = vers,
+        col ='orange'
+)
+```
+
+## Question B
+```{r}
+fcc = cumsum(prelevements)/sum(prelevements)
+fcd = rev(cumsum(rev(prelevements)))/sum(prelevements)
+```
+
+## Question C
+```{r}
+donnees = rep(vers, prelevements)
+mean(donnees)
+var(donnees)
+```
+
+## Question D
+```{r}
+vers[rank(prelevements)==8]
+quantile(donnees, 0.25)
+```
+
+# Exercice 3
+
+## Question A
+L'unité statistique est la case.  L'unique variable ici est la variable quantitative discrète qu'est le nombre de globule rouge par case. À chaque unité statistique (case), on associe la valeur de la variable "nombre de globules". 
+
+```{r}
+# On crée les objets
+nbGlobules = c(0,1,2,3,4,5,6,7, 8, 9, 10)
+nbCases = c(12,42,91,111, 100, 66, 46, 21, 8, 2, 1)
+barplot(height = nbCases/sum(nbCases),
+        names.arg = nbGlobules,
+        col ='orange'
+)
+```
+
+## Question B
+````{r}
+freq = nbCases/sum(nbCases)
+tab = as.table(rbind(freq))
+colnames(tab) = nbGlobules
+tab
+````
+
+## Question C
+````{r}
+donnees = rep(nbGlobules, nbCases)
+mean(donnees)
+quantile(donnees, 0.5)
+nbGlobules[rank(nbCases)==max(rank(nbCases))]
+````
+
+## Question D
+````{r}
+var(donnees)
+sd(donnees)
+````
+
+# Exercice 4
+
+## Question A
+````{R}
+taille = as.integer(unlist(strsplit("138 164 150 132 144 125 149 157 146 158 140 147 136 148 152 144 168 126 138 176 163 119 154 165 146 173 142 147 135 153 140 135 161 145 135 142 150 156 145 128", split = " ")))
+
+mean(taille)
+var(taille)
+as.numeric((quantile(taille, 0.9) - quantile(taille, 0.1)))
+````
+
+## Question B
+````{R}
+h = hist(taille,
+         breaks = seq(118, 178, 6),
+         col = 'orange'
+       )
+
+inter = function(vec){
+  paste( c("[", vec[1], ";", vec[2], "["), collapse = "")
+}
+
+bornes = matrix(
+  rep(
+    seq(118, 178, 6), 
+    c(1, rep(2,9),1)
+  ),
+  ncol = 2,
+  byrow = T
+)
+classes = apply(bornes, 1, inter)
+tab = as.table(rbind(h$counts))
+colnames(tab) = classes
+rownames(tab) = "effectif"
+tab
+
+````
+
+## Question D
+````{r}
+h = hist(taille,
+         breaks = c(118, 132, 144, 152, 164, 178),
+         col = 'orange'
+       )
+
+bornes = matrix(
+  rep(
+    c(118, 132, 144, 152, 164, 178),
+    c(1, rep(2,4),1)
+  ),
+  ncol = 2,
+  byrow = T
+)
+classes = apply(bornes, 1, inter)
+tab = as.table(rbind(h$counts))
+colnames(tab) = classes
+rownames(tab) = "effectif"
+tab
+````

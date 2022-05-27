@@ -1,0 +1,204 @@
+---
+title: "Reponses TP3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Exercice n°1
+
+### Question 1
+Un sac contient 26 jetons sur lesquels figurent les 26 lettres de l'alphabet. On en choisit 5 au hasard que l'on aligne afin de former un mot de 5 lettres. X est le nombre de voyelles dans ce mot.
+
+Sans remise : on compte le nombre de fois qu'une expérience réussi -> hypergéométrique
+
+### Question 2
+
+On range 20 objets dans 3 tiroirs. X est le nombre d'objets dans le premier tiroir.``
+
+Loi binomiale de paramètres 20, 1/3
+
+### Question 3
+Un enclos contient 15 lamas, 15 dromadaires et 15 chameaux. On sort un animal au hasard
+de cet enclos. X est le nombre de bosses.
+
+Loi uniforme
+
+### Question 4
+Une urne contient 6 boules vertes, 3 boules rouges et 5 boules bleues. On tire successivement
+et sans remise 10 boules de l'urne. X est le nombre de boules vertes tirées.
+
+H(14, 10, 3/7)
+
+### Question 5
+On prend un jeu de 32 cartes mélangées. On retourne une par une les cartes jusqu'à l'apparition
+de l'as de c÷ur. X est le nombre de cartes que l'on a retournées.
+
+Uniforme
+
+### Question 6
+On suppose que la probabilité de naissance d'une 􏰆lle et d'un garçon sont identiques. X est
+le nombre de garçons dans une famille de 3 enfants.
+
+Binomiale
+
+### Question 8
+On suppose que 1% des trè􏰇es possèdent quatre feuilles. On cueille 100 trè􏰇es. X est le nombre
+de trè􏰇es à quatre feuilles cueillis.
+
+binomiale
+
+## Exercice n°2
+
+### Question n°1
+Quelle est la probabilité d'obtenir 1 avec la loi binomiale B(10, 1/3) ?
+
+```{r}
+n <- 10 
+p <- 1/3 
+k <- 1
+dbinom(k, n, p)
+
+```
+
+### Question n°2
+
+Donner toutes les probabilités associées à la loi B(10, 1/3).
+
+```{r}
+n = 10
+p = 1/3
+k = 0:10
+
+dbinom(k, n,p)
+```
+
+### Question n°3
+
+Quelle est la probabilité d'obtenir plus de 45 et strictement moins de 55 avec la loi binomiale
+B(100, 1/2) ?
+
+```{r}
+n <- 100
+p <- 1/2
+k <- 45:54
+
+sum(dbinom(k, n, p)) #Somme de toutes les proba entre 45 et 54
+# Ou
+pbinom(54, n, p) - pbinom(44, n, p) #proba de inf à 54 moins la proba de inf à 44
+```
+
+### Question n°4
+
+Une pièce de monnaie déséquilibrée donne Pile 6 fois sur 10. Lors d'une séquence de lancers de cette pièce, quelle est la probabilité que Face apparaisse pour la première fois au 4ème lancer ? Pour cela, on utilisera la fonction dgeom
+
+```{r}
+dgeom(3, 4/10) # Proba de 3 piles sur 3 lancer
+```
+
+### Question n°5
+
+Quelle est la probabilité de dépasser strictement 4 pour une loi de Poisson de paramètre 2.7 ?
+
+```{r}
+ppois(4, 2.7) #Proba que poisson, paramètre 2.7 inf à 4
+1 - ppois(4, 2.7) #Proba que poisson, paramètre 2.7 sup à 4
+ppois(4, 2.7, lower.tail=FALSE) #Proba que poisson, paramètre 2.7 sup à 4
+```
+
+### Question n°6
+Donner un échantillon aléatoire simple de 10 valeurs de la loi P(2.7).
+```{r}
+rpois(10, 2.7)
+```
+
+## Exercice n°3
+
+### Question 1
+
+À l'aide de la calculatrice R, calculer la valeur de la densité de la loi exponentielle E(0.7) au
+point 1.6. Comparer avec la valeur obtenue grâce à la fonction dexp.
+
+```{r}
+lambda <- 0.7
+x <- 1.6
+lambda*exp(-lambda*x)
+
+dexp(x, lambda)
+```
+
+### Question 2
+De la même manière, calculer de deux façons di􏰅érentes P(Y < 1.6), où Y ∼ E(0.7).
+
+```{r}
+1-exp(-lambda*x)
+
+pexp(x, lambda)
+```
+
+### Question 3
+Quelle est la probabilité de dépasser 1.96 pour la loi normale centrée réduite ?
+
+```{r}
+1-pnorm(1.96)
+pnorm(1.96, lower.tail = FALSE)
+```
+
+### Question 4
+
+```{r}
+qnorm(0.975)
+```
+
+## Exercice 4
+
+### Question 1
+Donner la loi exacte de la v.a. X égale au nombre d'étudiants du groupe O. A􏰈cher avec R toutes les probabilités assoicées.
+
+```{r}
+dbinom(0:50, 50, 0.4) # On teste la loi binomiale (50 tirage, proba 0.4) pour toutes les valeur de 0 à 50
+plot(dbinom(0:50, 50, 0.4))
+```
+
+### Question 2
+Donner la loi exacte de la v.a. Y égale au nombre d'étudiants du groupe AB. A􏰈cher avec R toutes les probabilités associées.
+
+```{r}
+
+dbinom(0:50, 50, 0.03)
+```
+
+### Question 3
+
+Calculer P(Y ≤ 4), P(Y ≥ 3), l'espérance et la variance de Y en utilisant le logiciel R.
+```{r}
+pbinom(4, 50, 0.03) #Proba que binom inférieure à 4
+
+pbinom(2, 50, 0.03, lower.tail = FALSE) #Proba que binom inférieure à 4
+
+n <- 50
+p <- 0.03
+mu <- n*p
+sig2 <- n*p*(1-p)
+```
+
+## Exercice 5
+
+### Question 1
+
+```{r}
+bornes <- seq(32.5,45,2.5)
+probas = diff(pnorm(bornes, 37.75, 2.5)) # Proba de se trouver dans sur une borne
+
+propor <- probas/sum(probas) #Proportion des clients a se trouver dans une borne
+round(propor, 2)
+
+1-sum(probas) # Proba d'un client de ne pas trouver sa taille
+```
+
+
+```{r}
+
+```

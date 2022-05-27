@@ -1,0 +1,183 @@
+---
+title: "Reponses TP2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Exercice n°1
+
+### Question a
+
+```{r}
+
+superficie = c("[0;5[","[5;10[","[10;20[","[20;50[","[50;100[") #Le texte affiché
+bornes = c(0,5,10,20,50,100) #La valeur des bornes
+effectif = c(5, 24, 38, 26, 7) #L'effectif de chaque bornes
+amplitudes = diff(bornes) #On calcule l'effectif de chaques bornes
+hauteurs = effectif/sum(effectif)/amplitudes # On calcule la hauteur des batons - effectif/sum(effectif) divisé encore par l'amplitude correspondante (afin que l'aire de rectangle corresponde à son effectif)
+
+barplot(height = hauteurs,
+        width = amplitudes,
+        names.arg = superficie,
+        las = 2,
+        col = 'orange')
+```
+
+### Question b
+
+```{r}
+effectif
+frequences = effectif/sum(effectif) #Fréquences
+ecc = cumsum(effectif) #Effectif cumulé croissant
+ecd <- rev(cumsum(rev(effectif))) #Effectif cumulé décroissant
+fcc <- cumsum(frequences) # Fréquences cumulées croissantes
+fcd = rev(cumsum(rev(frequences))) # Fréquences cumulées décroissantes
+```
+
+### Question c
+
+```{r}
+#On calcule le milieu des bornes
+milieu = bornes[-6] + amplitudes/2
+# Le mode est le centre de la classe avec le plus fort effectif
+centres[which(rank(hauteurs)==5)]
+```
+
+### Question d
+
+```{r}
+donnees = rep(centres, effectif) # On génére un faux jeu de données (supossant que chaque parcelle fait la taille du milieu de sa classe)
+mean(donnees) #Moyenne
+var(donnees) #Covariance corrigée
+```
+
+### Question e
+
+```{r}
+median(donnees) # Médianne
+quantile(donnees, 0.5) #Quantile 0.5 (médianne aussi)
+```
+
+
+## Exercice n°2
+
+```{r}
+# On reporte les données
+vers = 0:7 
+prelevements = c(13,27,28,19,8,3,1,1)
+```
+
+### Question a
+
+L'unitée statistique est le prélévement
+Une observation est l'échantillon de sable dans lequel on compte le nombre de vers
+A chaque unité statisitque (prélévement), on associe la variable de la valeur (nb de vers)
+
+```{r}
+barplot(height = prelevements/sum(prelevements),
+        names.arg = vers,
+        las = 2,
+        col = 'orange')
+```
+
+### Question b
+
+```{r}
+frequences = prelevements/sum(prelevements)
+fcc = cumsum(frequences)# Fréquences cumulées croissantes
+fcd = rev(cumsum(rev(frequences)))# Fréquences cumulées decroissantes
+```
+
+### Question c
+
+```{r}
+donnees = rep(vers, prelevements) # On reproduit un jeu de données
+mean(donnees) #Moyenne
+var(donnees) #Covariance corrigée
+```
+
+### Question d
+
+```{r}
+vers[rank(prelevements)==8]
+quantile(donnees, 0.25)
+```
+
+## Exercice n°3
+
+### Question a
+
+L'unitée statistique est le prélévement
+La varialble compte les Hématies dans un prélévement (variable quantitative discrete à valeurs entières)
+
+```{r}
+i = 0:10
+ni = as.integer(unlist(strsplit("12 42 91 111 100 66 46 21 8 2 1", split = " ")))
+barplot(height = ni/sum(ni),
+        names.arg = i,
+        las = 2,
+        col = 'orange')
+```
+
+### Question b
+
+```{r}
+freq = ni/sum(ni)
+fcc = cumsum(freq)
+fcd = rev(cumsum(rev(freq)))
+tab <- as.table(rbind(freq, fcc, fcd)) 
+colnames(tab) <- i
+tab
+```
+
+### Question c
+```{r}
+donnees = rep(i,ni) #On génére les donnees
+mean(donnees) # Moyenne
+i[rank(ni) ==max(rank(ni))]#Mode
+quantile(donnees, 0.5) #Medianne
+```
+
+### Question d
+
+```{r}
+var(donnees) #Variance
+sd(donnees) #Ecart type
+```
+
+## Exercice n°4
+
+### Question a
+```{r}
+tailles <- as.integer(unlist(strsplit("138 164 150 132 144 125 149 157 146 158 140 147 136 148 152 144 168 126 138 176 163 119 154 165 146 173 142 147 135 153 140 135 161 145 135 142 150 156 145 128", split = " ")))
+mean(tailles) #Moyenne
+var(tailles) #Variance
+# Écart interdécide : écrart entre le décile d'ordre 1 (10%) et celui d'ordre 9 (90%)
+quantile(tailles, 0.9) - quantile(tailles, 0.1)
+```
+
+### Question b
+```{r}
+h <- hist(tailles, 
+          breaks = seq(118, 178, 6), # On découpe le tout en 10 classes de tailles égales
+          col = "orange")
+
+
+# On range en classes
+inter <- function(vec) {
+paste(c("[", vec[1], ";", vec[2], "["), collapse = "")
+}
+bornes <- matrix(rep(seq(118, 178, 6), c(1,rep(2,9),1)), ncol = 2, byrow = T) 
+classes <- apply(bornes, 1, inter)
+tab <- as.table(rbind(h$counts)) 
+colnames(tab) <- classes
+rownames(tab) <- "effectif"
+tab
+
+centres <- apply(bornes, 1, mean)
+mu <- sum(centres*h$counts)/length(tailles) #Moyenne
+sig2 <- sum(h$counts*(centres-mu)**2)/(length(tailles)-1) #Variance
+```

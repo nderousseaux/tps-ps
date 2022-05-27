@@ -1,0 +1,65 @@
+---
+title: "TP4 - Réponses"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Exercice n°1 
+
+## Question A
+La formule pour simuler un échantillon de taille $n=30$ de loi normale et de paramètres $\mu = 10$, $\sigma^2 = 4$ est :
+
+```{r}
+echantillon = rnorm(30, 10, 2)
+```
+
+## Question B
+
+### a)
+L'estimateur de l'espérance par excellence est la moyenne d'échantillon dont l'expression est 
+$$\overline{X_n}=\frac1n\sum_{i=1}^nX_i$$
+
+### b)
+```{r}
+mean(echantillon)
+```
+On observe que la valeur de l'estimateur de la moyenne ne vaut pas exactement la valeur théorique du paramètre recherchée (la valeur de $\mu$).
+
+### c)
+L'estimateur de la variance par excellence est la variance d'échantillon dont l'expression est :
+$$S^2=\frac1n\sum_{i=1}^n(X_i-\overline{X_n})^2$$
+
+En fait
+$$\mathbb E(S^2)=\frac{n-1}n\text{Var(X)}$$
+
+### d)
+```{r}
+sum( (echantillon-mean(echantillon))**2)/length(echantillon)
+```
+On constate que la variance empirique est dans les environs de la véritable variance ($\sigma^2 = 4$), mais en est relativement eloignée 
+
+### e)
+```{r}
+var(echantillon)
+```
+
+La valeur de cet estimateur, la variance corrigée, semble plus proche de la valeur théorique de $\sigma^2$.
+
+## Question C
+
+### a)
+L'intervale de confiance de $\mu$ au niveau $\alpha$ s'exprime ainsi :
+   
+Ou $u_p$ est le quantile d'ordre p pour la loi normale centrée réduite
+  
+$$\left]\overline{X_n}-\frac{\sigma}{\sqrt n}u_{1-\frac\alpha2}\;;\;\overline{X_n}+\frac{\sigma}{\sqrt n}u_{1-\frac\alpha2}\right[$$
+
+### b)
+```{r}
+t.test(echantillon, conf.level = 0.9)
+t.test(echantillon, conf.level = 0.95)
+t.test(echantillon, conf.level = 0.99)
+```
+On observe que l'intervale de confiance s'élargi à mesure que l'on augmente la confiance. En effet, il y a plus de chance que la valeur réelle de l'espérence soit dans l'intervale si celui-çi est plus gros. 

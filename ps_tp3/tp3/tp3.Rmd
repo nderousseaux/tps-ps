@@ -1,0 +1,52 @@
+---
+title: "TP3 - Réponses"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Exercice n°1 
+
+## Question 1
+
+P(X=k)
+
+N = nb de jetons = 26
+p = proportion de voyelle = 6/26
+n = taille tirage = 5
+Sans remise : on compte le nombre de fois qu'une expérience réussi -> hypergéométrique
+$$
+\frac
+  {\binom{pN}{k}
+  \binom{(1-p)N}{n-k}}
+  {\binom{N}{n}}
+$$
+
+## Question 2
+
+$$
+  \binom{n}{k}
+  p^k
+  (1-p)^{n-k}
+$$
+Loi binomiale de paramètres 20, 1/3
+
+## Q3
+
+Loi uniforme
+
+## Q4 
+H(14, 10, 3/7)
+
+##Q5
+Uniforme
+
+Q6
+Binomiale
+
+Q7 
+
+Q8 
+
+Binomiale

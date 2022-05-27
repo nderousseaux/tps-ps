@@ -1,0 +1,76 @@
+---
+title: "Reponses TP5"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Exercice n°1
+
+### Question 1
+
+```{r}
+clients <- 0:6
+magasins <- c(37,46,39,19,5,3,1)
+donnees <- rep(clients, magasins)
+mu <- mean(donnees)
+sig2 <- var(donnees)
+```
+
+### Question 2
+Dans une loi de poisson, l'espérence égale la variance
+
+```{r}
+freq.obs <- magasins/sum(magasins) #frequence observée
+freq.theo <- dpois(0:6, lambda = mu) #frequence théorique
+tab <- rbind(freq.obs, freq.theo)*150 #On compare les effectifs observés avec les effectifs théoriques (*150 car effectif total pour passer de fréquence à effectif)
+chisq.test(tab) # On teste l'indépendance entre observé et théorique. 
+#Au seuil 0.05, se n'est pas significatif, on gardera X suit une loi de poisson.
+```
+
+## Exercice n°2
+
+### Question 1
+
+```{r}
+bonbons <- read.csv("./sujet/bonbons.csv")
+barplot(table(bonbons$couleur), las=2,
+  col=c("blue","yellow","brown","orange","red","green"))
+```
+
+### Question 2
+
+H0 : les facteurs observés théorique et couleur sont indépendant
+H1 : les facteurs observés théorique et couleur ne sont pas indépendant
+
+```{r}
+tab <- rbind(table(bonbons$couleur), c(0.2,0.1,0.2,0.1,0.3,0.1)*64) # Effectif théorique (64 bonbons)
+chisq.test(tab)
+```
+
+Le test n'est pas significatif en dessous de 0,1, H0 est conservé
+
+### Question 3
+
+H0 : les proportions de chaque couleur sont égales
+H1 : il existe au moins une couleur de proportion différente des autres
+
+```{r}
+tabb <- rbind(table(bonbons$couleur), rep(1/6,6)*64)
+chisq.test(tabb)
+```
+Le test n’est pas significatif. H0. On observe d’ailleurs que la p−valeur est plus élevée ici. On peut dire que l’hypothèse de normalité est meilleure que l’hypothèse précédente
+
+
+## Exercice 3
+
+
+```{r}
+salaries <- read.csv("./sujet/salaries.csv", row.names=1)
+```
+
+```{r}
+
+```
